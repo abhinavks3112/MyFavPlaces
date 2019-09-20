@@ -1,23 +1,35 @@
 import React from 'react';
 import {
- View, Text, StyleSheet, Button
+ FlatList
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { useSelector } from 'react-redux';
 
-import Colors from '../constants/Colors';
 import CustomHeaderButton from '../components/CustomHeaderButton';
+import PlaceItem from '../components/PlaceItem';
+
 
 const PlacesListScreen = (props) => {
     const { navigation } = props;
+    const places = useSelector((state) => state.places.places);
+
+    const onPlaceSelectHandler = (itemData) => (
+            <PlaceItem
+             id={itemData.item.id}
+             name={itemData.item.name}
+             onSelect={navigation.navigate('PlaceDetails', {
+                 placeId: itemData.item.id,
+                 placeName: itemData.item.name
+             })}
+            />
+    );
+
     return (
-    <View style={styles.screen}>
-        <Text>Places List Screen</Text>
-        <Button
-        title="Place Details"
-        color={Colors.Primary}
-        onPress={() => navigation.navigate('PlaceDetails')}
-        />
-    </View>
+    <FlatList
+    data={places}
+    keyExtractor={(item) => item.id}
+    renderItem={onPlaceSelectHandler}
+    />
     );
 };
 
@@ -36,13 +48,5 @@ PlacesListScreen.navigationOptions = (navData) => {
         )
     };
 };
-
-const styles = StyleSheet.create({
-    screen: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
-});
 
 export default PlacesListScreen;
