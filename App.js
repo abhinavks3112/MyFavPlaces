@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 import { useScreens } from 'react-native-screens';
+import { Provider } from 'react-redux';
+
 import PlacesNavigator from './navigation/MyFavPlacesNavigator';
+import configureStore from './store/configureStore';
 
 useScreens(true);
 
@@ -23,7 +26,10 @@ export default function App() {
     );
   }
 
+  const store = configureStore();
   return (
+    <Provider store={store}>
       <PlacesNavigator />
+    </Provider>
   );
 }
