@@ -1,8 +1,9 @@
 import React from 'react';
 import {
-    View, StyleSheet, ImageBackground, TouchableNativeFeedback, Dimensions
+    View, StyleSheet, Image, ImageBackground, TouchableNativeFeedback, Dimensions
 } from 'react-native';
 import TitleText from './TitleText';
+import BodyText from './BodyText';
 
 const PlaceItem = (props) => {
     const { name, onSelect } = props;
@@ -13,15 +14,21 @@ const PlaceItem = (props) => {
             <View style={styles.card}>
                 <ImageBackground
                 source={{ uri: 'https://cdn.pixabay.com/photo/2015/05/23/16/59/homestead-780767_960_720.jpg' }}
-                style={styles.image}
-                // ImageBackground style prop is used by view that wraps the image
-                // so it accepts only height and width, no border radius.
-                // To give the boder radius to image inside ImageBackground, pass this in imageStyle
-                imageStyle={{ borderRadius: 10 }}
                 blurRadius={4}
+                style={styles.imageBackground}
                 >
-                    <View style={styles.titleContainer}>
-                        <TitleText style={styles.title}>{name}</TitleText>
+                    <View style={styles.content}>
+                        <View style={styles.imageContainer}>
+                            <Image
+                            source={{ uri: 'https://cdn.pixabay.com/photo/2015/05/23/16/59/homestead-780767_960_720.jpg' }}
+                            style={styles.image}
+                            borderRadius={100}
+                            />
+                        </View>
+                        <View style={styles.captionContainer}>
+                            <TitleText style={styles.title}>{name}</TitleText>
+                            <BodyText style={styles.address}>Address</BodyText>
+                        </View>
                     </View>
                 </ImageBackground>
             </View>
@@ -32,28 +39,46 @@ const PlaceItem = (props) => {
 const styles = StyleSheet.create({
     card: {
         width: Dimensions.get('window').width > 300 ? Dimensions.get('window').width : 300,
-        height: 300,
-        paddingHorizontal: 10,
-        paddingTop: 10,
-        paddingBottom: 5,
-        overflow: 'hidden'
+        height: 200,
+        padding: 10,
+        overflow: 'hidden',
+        backgroundColor: '#f7f7f7',
+        marginBottom: 1
     },
-    image: {
+    imageBackground: {
         width: '100%',
         height: '100%'
     },
-    titleContainer: {
+    content: {
         position: 'absolute',
+        flexDirection: 'row',
+        alignItems: 'center',
         top: 0,
         right: 0,
         bottom: 0,
-        left: 0,
-        justifyContent: 'center',
-        alignItems: 'center'
+        left: 0
+    },
+    imageContainer: {
+        marginLeft: 20
+    },
+    image: {
+        width: 110,
+        height: 110,
+        borderColor: '#777',
+        borderWidth: 2
+    },
+    captionContainer: {
+        marginHorizontal: 20,
+        justifyContent: 'center'
     },
     title: {
-        fontSize: 40,
+        fontSize: 25,
+        marginVertical: 5,
         color: 'white'
+    },
+    address: {
+        fontSize: 18,
+        color: '#777'
     }
 });
 

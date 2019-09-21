@@ -17,7 +17,7 @@ const PlacesListScreen = (props) => {
             <PlaceItem
              id={itemData.item.id}
              name={itemData.item.name}
-             onSelect={navigation.navigate('PlaceDetails', {
+             onSelect={() => navigation.navigate('PlaceDetails', {
                  placeId: itemData.item.id,
                  placeName: itemData.item.name
              })}
