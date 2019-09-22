@@ -6,21 +6,21 @@ import TitleText from './TitleText';
 import BodyText from './BodyText';
 
 const PlaceItem = (props) => {
-    const { name, onSelect } = props;
+    const { name, image, onSelect } = props;
     return (
         <TouchableNativeFeedback
         onPress={onSelect}
         >
             <View style={styles.card}>
                 <ImageBackground
-                source={{ uri: 'https://cdn.pixabay.com/photo/2015/05/23/16/59/homestead-780767_960_720.jpg' }}
+                source={{ uri: image }}
                 blurRadius={4}
                 style={styles.imageBackground}
                 >
                     <View style={styles.content}>
                         <View style={styles.imageContainer}>
                             <Image
-                            source={{ uri: 'https://cdn.pixabay.com/photo/2015/05/23/16/59/homestead-780767_960_720.jpg' }}
+                            source={{ uri: image }}
                             style={styles.image}
                             borderRadius={100}
                             />

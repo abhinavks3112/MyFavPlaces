@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
  View, Button, StyleSheet, Image, Alert
 } from 'react-native';
@@ -9,7 +9,9 @@ import Colors from '../constants/Colors';
 
 import BodyText from './BodyText';
 
-const ImageSelector = () => {
+const ImageSelector = (props) => {
+    const { onImageTaken } = props;
+    const [pickedImage, setPickedImage] = useState();
     /* If the use has granted permissions already then,
      it will just return true and false and no alert */
     const verifyPermissions = async () => {
@@ -27,18 +29,34 @@ const ImageSelector = () => {
     };
 
     const takeImageHandler = async () => {
-        const hasPermissions = await verifyPermissions();
-        if (!hasPermissions) {
-            return;
+        try {
+            const hasPermissions = await verifyPermissions();
+            if (!hasPermissions) {
+                return;
+            }
+            const image = await ImagePicker.launchCameraAsync({
+                mediaTypes: 'Images',
+                quality: 0.5,
+                allowsEditing: true,
+                aspect: [16, 9]
+            });
+            setPickedImage(image.uri);
+            onImageTaken(image.uri);
+        } catch (err) {
+           Alert.alert('Error', 'Something unexpected has happened!!', [{ text: 'Okay' }]);
         }
-        ImagePicker.launchCameraAsync();
     };
 
     return (
         <View style={styles.imagePicker}>
             <View style={styles.imagePreview}>
-                <BodyText>No Image picked yet!!</BodyText>
-                <Image style={styles.image} />
+               {!pickedImage ? <BodyText>No Image picked yet!!</BodyText>
+                : (
+                    <Image
+                    style={styles.image}
+                    source={{ uri: pickedImage }}
+                    />
+                )}
             </View>
             <Button
             title="Take Image"

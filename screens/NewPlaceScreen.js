@@ -14,16 +14,21 @@ import { addPlace } from '../store/actions/placesAction';
 const NewPlaceScreen = (props) => {
     const { navigation } = props;
     const [titleValue, setTitleValue] = useState('');
+    const [imageValue, setImageValue] = useState('');
     const dispatch = useDispatch();
 
     const saveButtonHandler = useCallback(() => {
-        dispatch(addPlace(titleValue, '', '', ''));
+        dispatch(addPlace(titleValue, '', imageValue, ''));
         navigation.navigate('Places');
-    }, [dispatch, titleValue]);
+    }, [dispatch, titleValue, imageValue]);
 
     useEffect(() => {
         navigation.setParams({ save: saveButtonHandler });
     }, [saveButtonHandler]);
+
+    const takenImageHandler = (image) => {
+        setImageValue(image);
+    };
 
     return (
         <ScrollView style={styles.screen}>
@@ -34,7 +39,7 @@ const NewPlaceScreen = (props) => {
                     value={titleValue}
                     onChangeText={(text) => setTitleValue(text)}
                 />
-                <ImagePicker />
+                <ImagePicker onImageTaken={takenImageHandler} />
             </View>
         </ScrollView>
     );
