@@ -7,6 +7,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import TitleText from '../components/TitleText';
 import CustomHeaderButton from '../components/CustomHeaderButton';
+import ImagePicker from '../components/ImageSelector';
 
 import { addPlace } from '../store/actions/placesAction';
 
@@ -33,6 +34,7 @@ const NewPlaceScreen = (props) => {
                     value={titleValue}
                     onChangeText={(text) => setTitleValue(text)}
                 />
+                <ImagePicker />
             </View>
         </ScrollView>
     );
