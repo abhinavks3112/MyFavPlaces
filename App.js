@@ -6,8 +6,15 @@ import { Provider } from 'react-redux';
 
 import PlacesNavigator from './navigation/MyFavPlacesNavigator';
 import configureStore from './store/configureStore';
+import { init } from './helpers/db';
 
+// Enabling use of native components more for faster navigation
 useScreens(true);
+
+// Initializing Database
+init()
+.then(() => console.log('INITIALIZED DATABASE'))
+.catch((err) => console.log('INITIALIZED DATABASE FAILED with error: ', err));
 
 const fetchFonts = () => (Font.loadAsync({
     'amita-bold': require('./assets/fonts/amita-bold.ttf'),
