@@ -2,10 +2,9 @@ import { SQLite } from 'expo-sqlite';
 
 const db = SQLite.openDatabase('places.db');
 
-// eslint-disable-next-line import/prefer-default-export
 export const init = () => {
     /* Custom promise to excute db transaction and resolve if
-    query succeeds, reject if it fails */
+    query succeeds, reject with error if it fails */
     const promise = new Promise((resolve, reject) => {
         db.transaction((tx) => {
             tx.executeSql(
@@ -21,6 +20,33 @@ export const init = () => {
             [],
             () => {
                 resolve();
+            },
+            (_, err) => {
+                reject(err);
+            }
+            );
+        });
+    });
+    return promise;
+};
+
+export const insertPlace = (name, address, latitude, longitude, imageUri, description) => {
+     /* Custom promise to excute db transaction and resolve with result if
+    query succeeds, reject with error if it fails */
+    const promise = new Promise((resolve, reject) => {
+        /* Entering the values in this fashion is insecure and could lead to sql injection attacks.
+        */
+        /* VALUES (${name}, ${address}, ${latitude}, ${longitude}, ${imageUri}, ${description});`
+        */
+        /* To prevent it we add ? in place of values and pass the values in second argument for
+        automatic validation and thereby preventing sql injection attack */
+        db.transaction((tx) => {
+            tx.executeSql(
+            `INSERT INTO places (name, address, lat, lng, imageUri, description)
+            VALUES (?, ?, ?, ?, ?, ?);`,
+            [name, address, latitude, longitude, imageUri, description],
+            (_, result) => {
+                resolve(result);
             },
             (_, err) => {
                 reject(err);
