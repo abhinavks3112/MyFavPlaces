@@ -1,6 +1,6 @@
 import * as FileSystem from 'expo-file-system';
-import { ADD_PLACE } from './types';
-import { insertPlace } from '../../helpers/db';
+import { ADD_PLACE, SET_PLACES } from './types';
+import { insertPlace, fetchPlaces } from '../../helpers/db';
 
 export const addPlace = (name, location, image, description) => async (dispatch) => {
     /* Split the image path into array of segments and take the last segment eg
@@ -29,7 +29,19 @@ export const addPlace = (name, location, image, description) => async (dispatch)
                 }
         });
     } catch (error) {
-        throw new Error('Something unexpected happened when moving the file ', error);
+        throw new Error('Something unexpected happened when adding the place ', error);
+    }
+};
+
+export const loadPlaces = () => async (dispatch) => {
+    try {
+        const dbResult = await fetchPlaces();
+        dispatch({
+                type: SET_PLACES,
+                places: dbResult.rows._array
+        });
+    } catch (error) {
+        throw new Error('Something unexpected happened when loading places ', error);
     }
 };
 

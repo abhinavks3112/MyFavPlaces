@@ -56,3 +56,29 @@ export const insertPlace = (name, address, latitude, longitude, imageUri, descri
     });
     return promise;
 };
+
+export const fetchPlaces = () => {
+    /* Custom promise to excute db transaction and resolve with result if
+   query succeeds, reject with error if it fails */
+   const promise = new Promise((resolve, reject) => {
+       /* Entering the values in this fashion is insecure and could lead to sql injection attacks.
+       */
+       /* VALUES (${name}, ${address}, ${latitude}, ${longitude}, ${imageUri}, ${description});`
+       */
+       /* To prevent it we add ? in place of values and pass the values in second argument for
+       automatic validation and thereby preventing sql injection attack */
+       db.transaction((tx) => {
+           tx.executeSql(
+           'SELECT * FROM places',
+           [],
+           (_, result) => {
+               resolve(result);
+           },
+           (_, err) => {
+               reject(err);
+           }
+           );
+       });
+   });
+   return promise;
+};
