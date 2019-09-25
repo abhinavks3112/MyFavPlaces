@@ -8,6 +8,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import TitleText from '../components/TitleText';
 import CustomHeaderButton from '../components/CustomHeaderButton';
 import ImagePicker from '../components/ImageSelector';
+import LocationPicker from '../components/LocationPicker';
 
 import { addPlace } from '../store/actions/placesAction';
 
@@ -40,6 +41,7 @@ const NewPlaceScreen = (props) => {
                     onChangeText={(text) => setTitleValue(text)}
                 />
                 <ImagePicker onImageTaken={takenImageHandler} />
+                <LocationPicker />
             </View>
         </ScrollView>
     );
@@ -71,7 +73,7 @@ const styles = StyleSheet.create({
         margin: 30
     },
     label: {
-        marginBottom: 15
+        marginBottom: 10
     },
     input: {
         borderBottomColor: '#777',
