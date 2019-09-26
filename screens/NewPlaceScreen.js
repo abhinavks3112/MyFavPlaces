@@ -41,7 +41,7 @@ const NewPlaceScreen = (props) => {
                     onChangeText={(text) => setTitleValue(text)}
                 />
                 <ImagePicker onImageTaken={takenImageHandler} />
-                <LocationPicker />
+                <LocationPicker navigation={navigation} />
             </View>
         </ScrollView>
     );

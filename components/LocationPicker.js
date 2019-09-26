@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import {
- View, Button, ActivityIndicator, Alert, StyleSheet
+ View, Button, ActivityIndicator, Alert, StyleSheet, TouchableNativeFeedback
 } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 
 import BodyText from './BodyText';
+import MapPreview from './MapPreview';
 import Colors from '../constants/Colors';
 
-const LocationPicker = () => {
+const LocationPicker = (props) => {
+    const { navigation } = props;
     const [isFetching, setIsFetching] = useState(false);
     const [pickedLocation, setPickedLocation] = useState();
 
@@ -38,7 +40,9 @@ const LocationPicker = () => {
           const location = await Location.getCurrentPositionAsync({ timeout: 5000 });
           setPickedLocation({
             latitude: location.coords.latitude,
-            longitude: location.coords.longitude
+            longitude: location.coords.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421
           });
         } catch (err) {
             Alert.alert('Could not fetch location', 'Please try again later or pick the location on map.',
@@ -46,18 +50,38 @@ const LocationPicker = () => {
         }
         setIsFetching(false);
     };
+
+    const pickOnMapHandler = () => {
+        navigation.navigate('Map', { location: pickedLocation });
+    };
+
     return (
         <View style={styles.locationPicker}>
-            <View style={styles.mapPreview}>
-                {isFetching
-                ? <ActivityIndicator size="large" color={Colors.Primary} />
-                : <BodyText>No Location chosen yet!!</BodyText>}
+            <TouchableNativeFeedback onPress={pickOnMapHandler}>
+                <View style={styles.mapPreview}>
+                    <MapPreview location={pickedLocation}>
+                        {isFetching
+                        ? <ActivityIndicator size="large" color={Colors.Primary} />
+                        : <BodyText>No Location chosen yet!!</BodyText>}
+                    </MapPreview>
+                </View>
+            </TouchableNativeFeedback>
+            <View style={styles.mapActions}>
+                <View styles={styles.buttonContainer}>
+                    <Button
+                    title="Pick on Map"
+                    color={Colors.Primary}
+                    onPress={pickOnMapHandler}
+                    />
+                </View>
+                <View styles={styles.buttonContainer}>
+                    <Button
+                    title="Get User Location"
+                    color={Colors.Primary}
+                    onPress={getLocationHandler}
+                    />
+                </View>
             </View>
-            <Button
-            title="Get User Location"
-            color={Colors.Primary}
-            onPress={getLocationHandler}
-            />
         </View>
     );
 };
@@ -70,11 +94,22 @@ const styles = StyleSheet.create({
     mapPreview: {
         marginBottom: 10,
         width: '100%',
-        height: 150,
+        height: 200,
         borderWidth: 1,
         borderColor: '#ccc',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    mapActions: {
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    buttonContainer: {
+       width: '40%',
+       padding: 5,
+       marginHorizontal: 5
     }
 });
 
