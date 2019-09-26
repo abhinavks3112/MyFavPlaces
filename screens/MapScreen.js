@@ -1,22 +1,36 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
+import MapView from 'react-native-maps';
 
-const MapScreen = () => {
+const MapScreen = (props) => {
+    const { navigation } = props;
+    const location = navigation.getParam('location');
+    let mapRegion = null;
+    if (!location) {
+    // default region
+        mapRegion = {
+        latitude: 37.5,
+        longitude: -122.43,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421
+    };
+    } else {
+        mapRegion = location;
+    }
     return (
-    <View style={styles.screen}>
-        <Text>Map Screen</Text>
-    </View>
+    <MapView
+    style={styles.map}
+    region={mapRegion}
+    />
     );
 };
 
-MapScreen.navigationOptions = () => {
-    return {
+MapScreen.navigationOptions = () => ({
         headerTitle: 'Map'
-    };
-};
+});
 
 const styles = StyleSheet.create({
-    screen: {
+    map: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
