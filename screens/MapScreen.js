@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 
 const MapScreen = (props) => {
     const { navigation } = props;
+    const [selectedLocation, setSelectedLocation] = useState();
     const location = navigation.getParam('location');
     let mapRegion = null;
     if (!location) {
@@ -17,11 +18,30 @@ const MapScreen = (props) => {
     } else {
         mapRegion = location;
     }
+
+    const selectLocationHandler = (event) => {
+        setSelectedLocation(event.nativeEvent.coordinate);
+    };
+
+    let markerCoordinate;
+
+    if(selectedLocation) {
+        markerCoordinate = selectedLocation
+    }
+
     return (
     <MapView
     style={styles.map}
     region={mapRegion}
-    />
+    onPress={selectLocationHandler}
+    >
+       {markerCoordinate && (
+           <Marker
+            title='Picked Location'
+            coordinate={markerCoordinate}
+            ></Marker>
+        )}
+    </MapView>
     );
 };
 
