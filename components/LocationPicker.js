@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
  View, Button, ActivityIndicator, Alert, StyleSheet, TouchableNativeFeedback
 } from 'react-native';
@@ -14,9 +14,20 @@ const LocationPicker = (props) => {
     const [isFetching, setIsFetching] = useState(false);
     const [pickedLocation, setPickedLocation] = useState();
 
+    const markedLocation = navigation.getParam('pickedLocation');
+
+    useEffect(() => {
+        if (markedLocation) {
+            setPickedLocation({
+                latitude: markedLocation.latitude,
+                longitude: markedLocation.longitude
+            });
+        }
+    }, [markedLocation]);
+
     /* If the use has granted permissions already then,
      it will just return true and false and no alert */
-     const verifyPermissions = async () => {
+    const verifyPermissions = async () => {
         /* Need to get permissions for both camera and gallery(camera roll) in IOS */
         const result = await Permissions.askAsync(Permissions.LOCATION);
         if (result.status !== 'granted') {
@@ -40,9 +51,7 @@ const LocationPicker = (props) => {
           const location = await Location.getCurrentPositionAsync({ timeout: 5000 });
           setPickedLocation({
             latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421
+            longitude: location.coords.longitude
           });
         } catch (err) {
             Alert.alert('Could not fetch location', 'Please try again later or pick the location on map.',

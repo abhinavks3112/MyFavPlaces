@@ -1,24 +1,34 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 
 const MapPreview = (props) => {
     const { location, children, style } = props;
-    // Default area
-    const mapRegion = {
-        latitude: 37.5,
-        longitude: -122.43,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421
-    };
+    const latitudeDelta = 0.0922;
+    const longitudeDelta = 0.0421;
+
     return (
         location
         ? (
             <MapView
             style={styles.map}
-            initialRegion={mapRegion}
-            region={location}
-            />
+            region={{
+                latitude: location.latitude,
+                longitude: location.longitude,
+                latitudeDelta,
+                longitudeDelta
+                }}
+            >
+                {location.latitude && location.longitude && (
+                    <Marker
+                        title="Picked Location"
+                        coordinate={{
+                                    latitude: location.latitude,
+                                    longitude: location.longitude
+                                    }}
+                    />
+                )}
+            </MapView>
         )
         : (
         <View style={{ ...styles.mapPreview, style }}>
