@@ -2,11 +2,19 @@ import React from 'react';
 import {
     View, StyleSheet, Image, ImageBackground, TouchableNativeFeedback, Dimensions
 } from 'react-native';
+
+import { convertDMS } from './LatLongToDMS';
 import TitleText from './TitleText';
 import BodyText from './BodyText';
 
 const PlaceItem = (props) => {
-    const { name, image, onSelect } = props;
+    const {
+    name, image, location, onSelect
+    } = props;
+    let formattedCoord;
+    if (location.latitude && location.longitude) {
+        formattedCoord = convertDMS(location.latitude, location.longitude);
+    }
     return (
         <TouchableNativeFeedback
         onPress={onSelect}
@@ -27,7 +35,7 @@ const PlaceItem = (props) => {
                         </View>
                         <View style={styles.captionContainer}>
                             <TitleText style={styles.title}>{name}</TitleText>
-                            <BodyText style={styles.address}>Address</BodyText>
+                            <BodyText style={styles.address}>{formattedCoord || ''}</BodyText>
                         </View>
                     </View>
                 </ImageBackground>
@@ -68,17 +76,19 @@ const styles = StyleSheet.create({
         borderWidth: 2
     },
     captionContainer: {
-        marginHorizontal: 20,
+        marginHorizontal: 10,
         justifyContent: 'center'
     },
     title: {
-        fontSize: 25,
-        marginVertical: 5,
+        fontSize: 22,
+        marginVertical: 2,
+        marginHorizontal: 5,
         color: 'white'
     },
     address: {
-        fontSize: 18,
-        color: '#777'
+        fontSize: 16,
+        marginHorizontal: 5,
+        color: '#e5e5e5'
     }
 });
 
