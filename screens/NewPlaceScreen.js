@@ -16,12 +16,13 @@ const NewPlaceScreen = (props) => {
     const { navigation } = props;
     const [titleValue, setTitleValue] = useState('');
     const [imageValue, setImageValue] = useState('');
+    const [selectedLocation, setSelectedLocation] = useState('');
     const dispatch = useDispatch();
 
     const saveButtonHandler = useCallback(() => {
-        dispatch(addPlace(titleValue, '', imageValue, ''));
+        dispatch(addPlace(titleValue, selectedLocation, imageValue, ''));
         navigation.navigate('Places');
-    }, [dispatch, titleValue, imageValue]);
+    }, [dispatch, titleValue, imageValue, selectedLocation]);
 
     useEffect(() => {
         navigation.setParams({ save: saveButtonHandler });
@@ -30,6 +31,10 @@ const NewPlaceScreen = (props) => {
     const takenImageHandler = (image) => {
         setImageValue(image);
     };
+
+    const locationPickedHandler = useCallback((location) => {
+        setSelectedLocation(location);
+    }, []);
 
     return (
         <ScrollView style={styles.screen}>
@@ -41,7 +46,10 @@ const NewPlaceScreen = (props) => {
                     onChangeText={(text) => setTitleValue(text)}
                 />
                 <ImagePicker onImageTaken={takenImageHandler} />
-                <LocationPicker navigation={navigation} />
+                <LocationPicker
+                navigation={navigation}
+                onLocationPicked={locationPickedHandler}
+                />
             </View>
         </ScrollView>
     );

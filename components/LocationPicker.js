@@ -10,7 +10,7 @@ import MapPreview from './MapPreview';
 import Colors from '../constants/Colors';
 
 const LocationPicker = (props) => {
-    const { navigation } = props;
+    const { navigation, onLocationPicked } = props;
     const [isFetching, setIsFetching] = useState(false);
     const [pickedLocation, setPickedLocation] = useState();
 
@@ -22,8 +22,9 @@ const LocationPicker = (props) => {
                 latitude: markedLocation.latitude,
                 longitude: markedLocation.longitude
             });
+            onLocationPicked(markedLocation);
         }
-    }, [markedLocation]);
+    }, [markedLocation, onLocationPicked]);
 
     /* If the use has granted permissions already then,
      it will just return true and false and no alert */
@@ -53,6 +54,7 @@ const LocationPicker = (props) => {
             latitude: location.coords.latitude,
             longitude: location.coords.longitude
           });
+          onLocationPicked(pickedLocation);
         } catch (err) {
             Alert.alert('Could not fetch location', 'Please try again later or pick the location on map.',
              [{ text: 'Okay' }]);
