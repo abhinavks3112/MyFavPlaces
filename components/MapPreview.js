@@ -3,7 +3,9 @@ import { View, StyleSheet } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
 const MapPreview = (props) => {
-    const { location, children, style } = props;
+    const {
+        location, children, style, scrollEnabled
+    } = props;
     const latitudeDelta = 0.0922;
     const longitudeDelta = 0.0421;
 
@@ -11,6 +13,7 @@ const MapPreview = (props) => {
         location
         ? (
             <MapView
+            scrollEnabled={scrollEnabled}
             style={styles.map}
             region={{
                 latitude: location.latitude,
