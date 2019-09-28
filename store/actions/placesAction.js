@@ -13,8 +13,8 @@ export const addPlace = (name, location, image, description) => async (dispatch)
         const dbResult = await insertPlace(
             name,
             'Dummy Address',
-            15.6,
-            12.3,
+            location.latitude,
+            location.longitude,
             newPath,
             description
         );

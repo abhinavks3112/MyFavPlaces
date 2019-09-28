@@ -12,7 +12,10 @@ const placesReducer = (state = INITIAL_STATE, action) => {
                 places: action.places.map((place) => new Place(
                     place.id.toString(),
                     place.name,
-                    place.address,
+                    {
+                        latitude: place.lat,
+                        longitude: place.lng
+                    },
                     place.imageUri,
                     place.description
                 ))
