@@ -37,7 +37,7 @@ const MapScreen = (props) => {
     };
 
     const saveMarkedLocationHandler = useCallback(() => {
-        if (!selectedLocation) {
+        if (!selectedLocation && !location) {
             Alert.alert('No Location Chosen', 'Please choose a location and then save!!', [{ text: 'Okay' }]);
             return;
         }
