@@ -63,7 +63,7 @@ const LocationPicker = (props) => {
     };
 
     const pickOnMapHandler = () => {
-        navigation.navigate('Map', { location: pickedLocation });
+        navigation.navigate('Map', { location: pickedLocation, editable: true });
     };
 
     return (

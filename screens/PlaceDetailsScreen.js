@@ -1,6 +1,6 @@
 import React from 'react';
 import {
- ScrollView, View, StyleSheet, Image
+ ScrollView, View, StyleSheet, Image, TouchableNativeFeedback
 } from 'react-native';
 import { useSelector } from 'react-redux';
 
@@ -19,6 +19,10 @@ const PlaceDetailsScreen = (props) => {
         selectedPlace.location.latitude, selectedPlace.location.longitude
     );
 
+    const onMapPreviewTouchHandler = () => {
+        navigation.navigate('Map', { location: selectedPlace.location });
+    };
+
     return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.screen}>
         <View style={styles.imageContainer}>
@@ -28,9 +32,11 @@ const PlaceDetailsScreen = (props) => {
             <View style={styles.locationContainer}>
                 <BodyText style={styles.location}>{formattedCoords}</BodyText>
             </View>
-            <View style={styles.mapPreview}>
-                <MapPreview location={selectedPlace.location} scrollEnabled={false} />
-            </View>
+            <TouchableNativeFeedback onPress={onMapPreviewTouchHandler}>
+                <View style={styles.mapPreview}>
+                    <MapPreview location={selectedPlace.location} scrollEnabled={false} />
+                </View>
+            </TouchableNativeFeedback>
         </View>
     </ScrollView>
     );

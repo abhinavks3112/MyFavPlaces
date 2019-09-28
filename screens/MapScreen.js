@@ -8,6 +8,7 @@ const MapScreen = (props) => {
     const { navigation } = props;
     const [selectedLocation, setSelectedLocation] = useState();
     const location = navigation.getParam('location');
+    const editable = navigation.getParam('editable');
     const latitudeDelta = 0.0922;
     const longitudeDelta = 0.0421;
     let markerCoordinate;
@@ -33,6 +34,9 @@ const MapScreen = (props) => {
     }
 
     const selectLocationHandler = (event) => {
+        if (!editable) {
+            return;
+        }
         setSelectedLocation(event.nativeEvent.coordinate);
     };
 
@@ -44,7 +48,7 @@ const MapScreen = (props) => {
         navigation.navigate('NewPlace', {
             pickedLocation: selectedLocation
         });
-    }, [selectedLocation]);
+    }, [selectedLocation, location]);
 
     useEffect(() => {
         navigation.setParams({
@@ -81,15 +85,18 @@ const MapScreen = (props) => {
 MapScreen.navigationOptions = (navData) => {
     const { navigation } = navData;
     const save = navigation.getParam('save');
+    const editable = navigation.getParam('editable');
     return ({
         headerTitle: 'Map',
-        headerRight: <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-                        <Item
-                        iconName="save"
-                        title="Save Marker"
-                        onPress={save}
-                        />
-                     </HeaderButtons>
+        headerRight: (editable && (
+                        <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+                            <Item
+                            iconName="save"
+                            title="Save Marker"
+                            onPress={save}
+                            />
+                        </HeaderButtons>
+                    ))
     });
 };
 
